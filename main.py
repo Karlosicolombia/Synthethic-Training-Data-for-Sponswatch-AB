@@ -7,11 +7,7 @@ import pytorch
 
 
 
-"Hello Theodor this is a test"
-a = "Tensorflow yes"
-print(a)
-print(tf.__version__)
-"Hello Hello"
+
 
 #Importera folder av bilder
 
