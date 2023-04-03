@@ -12,6 +12,7 @@ import torch.optim as optim
 from PIL import Image
 from skimage.io import imsave
 from utils import *
+from main import yoloAnnotation
 
 # File Inputs
 idx = 5
