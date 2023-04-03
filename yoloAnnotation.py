@@ -1,10 +1,10 @@
-from Deep Image Blending import 
+from DeepImageBlending import twopass
 
 
 def annotateimage(image):
-  
-  class = 
-  xmin =
+ 
+  id = 0  
+  xmin = 
   ymin =
   x =
   y =
