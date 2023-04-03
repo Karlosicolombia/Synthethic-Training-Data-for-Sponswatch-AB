@@ -11,4 +11,4 @@ Uppsala University - Sociotechnical Systems Engineering 2023-06
 
 The Data folder contains various datasets that we used in the process of creating our final synthetic dataset. It contains final logotypes used, backgrounds with from which we created the final composited images together with the logotypes. 
 
-
+The Annotations folder includes textfiles to each image that has been harmonized, with specific annotations for the object detection in the Yolo test network. 
