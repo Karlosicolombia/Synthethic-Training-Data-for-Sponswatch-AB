@@ -12,9 +12,9 @@ def annotateimage():
   y = ss
   number = sourcefile[5]
 
- os.chdir(r'/Karlosicolombia/Synthethic-Training-Data-for-Sponswatch-AB/edit/main/Annotations')
- file = open(str(number)'.txt', 'a')
- sys.stdout = file
+ #os.chdir(r'/Karlosicolombia/Synthethic-Training-Data-for-Sponswatch-AB/edit/main/Annotations')
+ #file = open(str(number)'.txt', 'a')
+ #sys.stdout = file
 
  print(id xmin ymin x y) 
 
