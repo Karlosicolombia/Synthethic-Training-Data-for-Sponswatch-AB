@@ -1,4 +1,4 @@
-from DeepImageBlending import twopass
+from DeepImageBlending import two_pass
 
 
 def annotateimage(image):
