@@ -3,7 +3,7 @@ from DeepImageBlending import run
 import sys
 import os
 
-def annotateimage(image):
+def annotateimage():
  
   id = 0  
   xmin = x_start
