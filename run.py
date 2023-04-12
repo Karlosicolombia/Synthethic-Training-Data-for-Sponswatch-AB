@@ -13,18 +13,25 @@ import pdb
 import os
 import imageio.v2 as iio
 import torch.nn.functional as F
+import sys
+import os
+
 
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--source_file', type=str, default='data/1_source.png', help='path to the source image')
-parser.add_argument('--mask_file', type=str, default='data/1_mask.png', help='path to the mask image')
-parser.add_argument('--target_file', type=str, default='data/1_target.png', help='path to the target image')
-parser.add_argument('--output_dir', type=str, default='results/1', help='path to output')
-parser.add_argument('--ss', type=int, default=300, help='source image size')
+parser.add_argument('--file_number', type=int, default=5, help='path to find file number')
+parser.add_argument('--source_file', type=str, default='data/5_source.png', help='path to the source image')
+parser.add_argument('--mask_file', type=str, default='data/5_mask.png', help='path to the mask image')
+parser.add_argument('--target_file', type=str, default='data/5_target.png', help='path to the target image')
+parser.add_argument('--output_dir', type=str, default='results', help='path to output')
+#parser.add_argument('--ss', type=int, default=300, help='source image size')
+parser.add_argument('--ss', type=int, default=int(np.random.uniform(30, 200)), help='source image size')
 parser.add_argument('--ts', type=int, default=512, help='target image size')
-parser.add_argument('--x', type=int, default=int(np.random.uniform(150, 362)), help='vertical location (center)')
-parser.add_argument('--y', type=int, default=int(np.random.uniform(150, 362)), help='vertical location (center)')
+parser.add_argument('--x', type=int, default=int(np.random.uniform(100, 412)), help='vertical location (center)')
+parser.add_argument('--y', type=int, default=int(np.random.uniform(100, 412)), help='vertical location (center)')
+#parser.add_argument('--x', type=int, default=150, help='vertical location (center)')
+#parser.add_argument('--y', type=int, default=150, help='vertical location (center)')
 parser.add_argument('--gpu_id', type=int, default=0, help='GPU ID')
 parser.add_argument('--num_steps', type=int, default=1000, help='Number of iterations in each pass')
 parser.add_argument('--save_video', type=bool, default=False, help='save the intermediate reconstruction process')
@@ -43,13 +50,17 @@ os.makedirs(opt.output_dir, exist_ok = True)
 source_file = opt.source_file
 mask_file = opt.mask_file
 target_file = opt.target_file
+file_number = opt.file_number
 
 # Hyperparameter Inputs
 gpu_id = opt.gpu_id
 num_steps = opt.num_steps
 ss = opt.ss; # source image size
 ts = opt.ts # target image size
+ss_firstPass = ss
+ts_firstPass = ts
 x_start = opt.x; y_start = opt.y # blending location
+
 
 # Default weights for loss functions in the first pass
 grad_weight = 1e4; style_weight = 1e4; content_weight = 1; tv_weight = 1e-6
@@ -157,15 +168,15 @@ while run[0] <= num_steps:
                 recon_process_video.append_data(final_blend_img[0].transpose(0,2).transpose(0,1).cpu().data.numpy())
         
         # Print Loss
-        if run[0] % 1 == 0:
-            print("run {}:".format(run))
-            print('grad : {:4f}, style : {:4f}, content: {:4f}, tv: {:4f}'.format(\
-                          grad_loss.item(), \
-                          style_loss.item(), \
-                          content_loss.item(), \
-                          tv_loss.item()
-                          ))
-            print()
+        #if run[0] % 1 == 0:
+            #print("run {}:".format(run))
+            #print('grad : {:4f}, style : {:4f}, content: {:4f}, tv: {:4f}'.format(\
+             #             grad_loss.item(), \
+              #            style_loss.item(), \
+               #           content_loss.item(), \
+                #          tv_loss.item()
+                 #         ))
+           # print()
         
         run[0] += 1
         return loss
@@ -181,15 +192,16 @@ blend_img = input_img*canvas_mask + target_img*(canvas_mask-1)*(-1)
 blend_img_np = blend_img.transpose(1,3).transpose(1,2).cpu().data.numpy()[0]
 
 # Save image from the first pass
-first_pass_img_file = os.path.join(opt.output_dir, 'first_pass.png')
+first_pass_img_file = os.path.join(opt.output_dir, str(file_number) +'_'+'first_pass.png')
 imsave(first_pass_img_file, blend_img_np.astype(np.uint8))
 
 ###################################
 ########### Second Pass ###########
 ###################################
 
+
 # Default weights for loss functions in the second pass
-style_weight = 1e6; content_weight = 1; tv_weight = 1e-5
+style_weight = 1e7; content_weight = 1; tv_weight = 1e-6
 ss = 512; ts = 512
 num_steps = opt.num_steps
 
@@ -209,6 +221,7 @@ def get_input_optimizer(first_pass_img):
 optimizer = get_input_optimizer(first_pass_img)
 
 print('Optimizing...')
+#print('Annotations after first_pass... ' + id, annotateimage.xmin, annotateimage.ymin, annotateimage.x, annotateimage.y)
 run = [0]
 while run[0] <= num_steps:
     
@@ -244,13 +257,13 @@ while run[0] <= num_steps:
             recon_process_video.append_data(final_blend_img[0].transpose(0,2).transpose(0,1).cpu().data.numpy())
         
         # Print Loss
-        if run[0] % 1 == 0:
-            print("run {}:".format(run))
-            print(' style : {:4f}, content: {:4f}'.format(\
-                          style_loss.item(), \
-                          content_loss.item()
-                          ))
-            print()
+        #if run[0] % 1 == 0:
+          #  print("run {}:".format(run))
+           # print(' style : {:4f}, content: {:4f}'.format(\
+            #              style_loss.item(), \
+             #             content_loss.item()
+              #            ))
+        #    print()
         
         run[0] += 1
         return loss
@@ -264,11 +277,28 @@ first_pass_img.data.clamp_(0, 255)
 input_img_np = first_pass_img.transpose(1,3).transpose(1,2).cpu().data.numpy()[0]
 
 # Save image from the second pass
-imsave(os.path.join(opt.output_dir, 'second_pass.png'), input_img_np.astype(np.uint8))
+imsave(os.path.join(opt.output_dir, str(file_number)+'.png'), input_img_np.astype(np.uint8))
 
 # Save recon process video
 if opt.save_video:
     recon_process_video.close()
 
+def annotateimage():
+ 
+  id = 0
+  xmin = x_start
+  ymin = y_start
+  total_size = ts_firstPass
+  source_size = ss_firstPass
+  number = source_file
+  print('DONE')
+  print(id, ymin/total_size, xmin/total_size, source_size/total_size, source_size/total_size)
+  #print(id, (xmin-(source_size/2))/total_size, (ymin-(source_size/2))/total_size,(xmin+(source_size/2))/total_size, (ymin+(source_size/2))/total_size)
+  path = r'C:\Users\Theo\Documents\GitHub\DeepImageBlending\annotations\\'
+  with open(path + str(file_number)+'.txt', 'w') as fp:
+    annotate = str(id) + ' ' + str(ymin/total_size) + ' ' + str(xmin/total_size) + ' ' + str(source_size/total_size) + ' ' + str(source_size/total_size) 
+    fp.write(annotate)
+    #fp.write(id, xmin/total_size, ymin/total_size, source_size/total_size, source_size/total_size)
+    fp.close()
 
-
+annotateimage()
