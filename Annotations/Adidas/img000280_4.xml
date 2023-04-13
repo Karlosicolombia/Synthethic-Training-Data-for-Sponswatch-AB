@@ -1,0 +1,26 @@
+<annotation>
+  <folder>adidas</folder>
+  <filename>img000280</filename>
+  <path>LogoDataset\adidas\img000280.jpg</path>
+  <source>
+    <database>Unknown</database>
+  </source>
+  <size>
+    <width>500</width>
+    <height>612</height>
+    <depth>3</depth>
+  </size>
+  <segmented>0</segmented>
+  <object>
+    <name>adidas3</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>201</xmin>
+      <ymin>350</ymin>
+      <xmax>264</xmax>
+      <ymax>388</ymax>
+    </bndbox>
+  </object>
+</annotation>

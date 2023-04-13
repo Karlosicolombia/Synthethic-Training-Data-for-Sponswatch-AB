@@ -1,0 +1,26 @@
+<annotation>
+  <folder>adidas</folder>
+  <filename>img000025</filename>
+  <path>H:\imagedataset1\adidas\img000025.jpg</path>
+  <source>
+    <database>Unknown</database>
+  </source>
+  <size>
+    <width>1200</width>
+    <height>2000</height>
+    <depth>1</depth>
+  </size>
+  <segmented>0</segmented>
+  <object>
+    <name>adidas3</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>992</xmin>
+      <ymin>1831</ymin>
+      <xmax>1176</xmax>
+      <ymax>1981</ymax>
+    </bndbox>
+  </object>
+</annotation>

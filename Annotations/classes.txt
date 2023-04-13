@@ -1,0 +1,1 @@
+["adidas1", "adidas3", "adidas-text"]

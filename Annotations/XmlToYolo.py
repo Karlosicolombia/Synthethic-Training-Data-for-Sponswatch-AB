@@ -25,17 +25,19 @@ def yolo_to_xml_bbox(bbox, w, h):
 
 
 classes = []
-input_dir = "annotations/"
+input_dir = r"C:\Users\kalle\Documents\GitHub\Synthethic-Training-Data-for-Sponswatch-AB\Annotations\Adidas"
 output_dir = "labels/"
-image_dir = "images/"
+image_dir = r"C:\Users\kalle\Documents\GitHub\Synthethic-Training-Data-for-Sponswatch-AB\Annotations\Adidas"
 
 # create the labels folder (output directory)
-os.mkdir(output_dir)
+#os.mkdir(output_dir)
 
 # identify all the xml files in the annotations folder (input directory)
-files = glob.glob(os.path.join(input_dir, '*.xml'))
+files = glob.glob(os.path.join(input_dir, '*4.xml'))
+print(files)
 # loop through each 
 for fil in files:
+    
     basename = os.path.basename(fil)
     filename = os.path.splitext(basename)[0]
     # check if the label contains the corresponding image file
@@ -53,6 +55,8 @@ for fil in files:
 
     for obj in root.findall('object'):
         label = obj.find("name").text
+        if label == 'bundesliga':
+            continue
         # check for new classes and append to list
         if label not in classes:
             classes.append(label)
@@ -68,6 +72,6 @@ for fil in files:
         with open(os.path.join(output_dir, f"{filename}.txt"), "w", encoding="utf-8") as f:
             f.write("\n".join(result))
 
-# generate the classes file as reference
+#generate the classes file as reference
 with open('classes.txt', 'w', encoding='utf8') as f:
     f.write(json.dumps(classes))
