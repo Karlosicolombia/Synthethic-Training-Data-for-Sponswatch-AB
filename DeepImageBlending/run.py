@@ -1,4 +1,5 @@
 # Packages
+
 import numpy as np
 import torch
 import torch.optim as optim
@@ -14,16 +15,16 @@ import os
 import imageio.v2 as iio
 import torch.nn.functional as F
 import sys
-import os
+
 
 
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--file_number', type=int, default=802, help='path to find file number')
-parser.add_argument('--source_file', type=str, default='data/802_source.png', help='path to the source image')
-parser.add_argument('--mask_file', type=str, default='data/802_mask.png', help='path to the mask image')
-parser.add_argument('--target_file', type=str, default='data/802_target.png', help='path to the target image')
+parser.add_argument('--file_number', type=int, default=1, help='path to find file number')
+parser.add_argument('--source_file', type=str, default='data/1_source.png', help='path to the source image')
+parser.add_argument('--mask_file', type=str, default='data/1_mask.png', help='path to the mask image')
+parser.add_argument('--target_file', type=str, default='data/1_target.png', help='path to the target image')
 parser.add_argument('--output_dir', type=str, default='results', help='path to output')
 #parser.add_argument('--ss', type=int, default=300, help='source image size')
 parser.add_argument('--ss', type=int, default=int(np.random.uniform(30, 200)), help='source image size')
@@ -295,7 +296,7 @@ def annotateimage():
   print('DONE')
   print(id, ymin/total_size, xmin/total_size, source_size/total_size, source_size/total_size)
   #print(id, (xmin-(source_size/2))/total_size, (ymin-(source_size/2))/total_size,(xmin+(source_size/2))/total_size, (ymin+(source_size/2))/total_size)
-  path = r'C:\Users\Theo\Documents\GitHub\DeepImageBlending\annotations\\'
+  path = r'C:\Users\kalle\Desktop\Synthethic-Training-Data-for-Sponswatch-AB-DIB-SponsWatch\Synthethic-Training-Data-for-Sponswatch-AB-DIB-SponsWatch\Annotations\\'
   with open(path + str(file_number)+'.txt', 'w') as fp:
     annotate = str(id) + ' ' + str(ymin/total_size) + ' ' + str(xmin/total_size) + ' ' + str(source_size/total_size) + ' ' + str(source_size/total_size) 
     fp.write(annotate)
